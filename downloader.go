@@ -13,7 +13,7 @@ var (
 )
 
 func Run(args []string) {
-	app := kingpin.New("gcs-img-dl", "Image downloader for Google Custom Search API.")
+	app := kingpin.New("downloader", "Image downloader for Google Custom Search API.")
 
 	app.Flag("conf", "config file path").Default("conf").Short('c').StringVar(&confPath)
 	app.Flag("query", "query").Required().Short('q').StringVar(&q)
