@@ -1,10 +1,14 @@
 package downloader
 
 import (
+	"fmt"
 	"log"
-	"net/url"
 
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
+)
+
+const (
+	timeout = 20
 )
 
 var (
@@ -29,30 +33,6 @@ func Run(args []string) {
 	gcs := NewGcsAPI()
 	gcs.setConfig(conf)
 	gcs.setQuery(q)
-}
-
-type GcsAPI struct {
-	url.URL
-}
-
-func NewGcsAPI() *GcsAPI {
-	g := GcsAPI{}
-	g.Scheme = "https"
-	g.Host = "www.googleapis.com"
-	g.Path = "customsearch/v1"
-	return &g
-}
-
-func (g *GcsAPI) setConfig(c Config) {
-	query := g.Query()
-	query.Set("cx", c.API.Cx)
-	query.Set("key", c.API.Key)
-	query.Set("searchType", "image")
-	g.RawQuery = query.Encode()
-}
-
-func (g *GcsAPI) setQuery(word string) {
-	query := g.Query()
-	query.Set("q", word)
-	g.RawQuery = query.Encode()
+	resp := gcs.Get()
+	fmt.Println(string(resp))
 }
