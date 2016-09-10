@@ -7,10 +7,6 @@ import (
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
 
-const (
-	timeout = 20
-)
-
 var (
 	confPath string
 	q        string
