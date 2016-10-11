@@ -24,6 +24,7 @@ func (g *GcsAPI) setConfig(c Config) {
 	query.Set("cx", c.API.Cx)
 	query.Set("key", c.API.Key)
 	query.Set("searchType", "image")
+	query.Set("fields", "items/link")
 	g.RawQuery = query.Encode()
 }
 
