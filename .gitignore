@@ -24,3 +24,6 @@ _testmain.go
 *.prof
 
 conf/credentials.toml
+
+outputs/*
+!.gitkeep
