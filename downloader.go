@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"sync"
 
 	"github.com/yyoshiki41/gcs-image-downloader/internal/entity"
 
@@ -44,9 +45,15 @@ func Run(args []string) {
 	json.Unmarshal(b, &resp)
 
 	if resp != nil {
+		var wg sync.WaitGroup
 		for _, v := range resp.Items {
-			download(v.Link)
+			wg.Add(1)
+			go func(link string) {
+				defer wg.Done()
+				download(link)
+			}(v.Link)
 		}
+		wg.Wait()
 	}
 }
 
