@@ -9,6 +9,7 @@ import (
 	"os"
 	"path"
 	"sync"
+	"sync/atomic"
 
 	"github.com/yyoshiki41/gcs-image-downloader/internal/entity"
 
@@ -43,23 +44,34 @@ func Run(args []string) {
 
 	resp := new(entity.GcsResponse)
 	json.Unmarshal(b, &resp)
-
-	if resp != nil {
-		var wg sync.WaitGroup
-		for _, v := range resp.Items {
-			wg.Add(1)
-			go func(link string) {
-				defer wg.Done()
-				download(link)
-			}(v.Link)
-		}
-		wg.Wait()
+	if resp == nil {
+		log.Fatal("CustomSearchAPI Response is empty!")
 	}
+
+	var errCount int64
+	var wg sync.WaitGroup
+	total := len(resp.Items)
+
+	log.Println("Start!")
+	for _, v := range resp.Items {
+		wg.Add(1)
+		go func(link string) {
+			defer wg.Done()
+
+			err := download(link)
+			if err != nil {
+				atomic.AddInt64(&errCount, 1)
+				log.Println(err)
+			}
+		}(v.Link)
+	}
+	wg.Wait()
+
+	log.Println("Download has completed!")
+	fmt.Printf("Total: %v, Success: %v, Failure: %v\n", total, int64(total)-errCount, errCount)
 }
 
 func download(link string) error {
-	fmt.Println(link)
-
 	resp, err := http.Get(link)
 	if err != nil {
 		return err
