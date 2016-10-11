@@ -3,7 +3,11 @@ package downloader
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
+	"net/http"
+	"os"
+	"path"
 
 	"github.com/yyoshiki41/gcs-image-downloader/internal/entity"
 
@@ -41,7 +45,29 @@ func Run(args []string) {
 
 	if resp != nil {
 		for _, v := range resp.Items {
-			fmt.Println(v.Link)
+			download(v.Link)
 		}
 	}
+}
+
+func download(link string) error {
+	fmt.Println(link)
+
+	resp, err := http.Get(link)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	_, fileName := path.Split(link)
+	file, err := os.Create(path.Join(outputsPath, fileName))
+	if err != nil {
+		return err
+	}
+
+	_, err = io.Copy(file, resp.Body)
+	if closeErr := file.Close(); err == nil {
+		err = closeErr
+	}
+	return err
 }
