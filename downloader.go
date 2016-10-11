@@ -1,8 +1,11 @@
 package downloader
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
+
+	"github.com/yyoshiki41/gcs-image-downloader/internal/entity"
 
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
@@ -29,6 +32,14 @@ func Run(args []string) {
 	gcs := NewGcsAPI()
 	gcs.setConfig(conf)
 	gcs.setQuery(q)
-	resp := gcs.Get()
-	fmt.Println(string(resp))
+	b := gcs.Get()
+
+	resp := new(entity.GcsResponse)
+	json.Unmarshal(b, &resp)
+
+	if resp != nil {
+		for _, v := range resp.Items {
+			fmt.Println(v.Link)
+		}
+	}
 }
