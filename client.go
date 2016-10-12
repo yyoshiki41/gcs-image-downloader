@@ -1,6 +1,7 @@
 package downloader
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -31,6 +32,12 @@ func (g *GcsAPI) setConfig(c Config) {
 func (g *GcsAPI) setQuery(word string) {
 	query := g.Query()
 	query.Set("q", word)
+	g.RawQuery = query.Encode()
+}
+
+func (g *GcsAPI) setStart(index int) {
+	query := g.Query()
+	query.Set("start", fmt.Sprint(index))
 	g.RawQuery = query.Encode()
 }
 

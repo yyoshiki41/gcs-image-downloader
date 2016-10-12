@@ -7,3 +7,7 @@ type GcsResponse struct {
 type Link struct {
 	Link string
 }
+
+func NewGcsResponse() *GcsResponse {
+	return &GcsResponse{}
+}
