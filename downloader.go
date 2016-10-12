@@ -34,6 +34,10 @@ func Run(args []string) {
 
 	kingpin.MustParse(app.Parse(args))
 
+	if _, err := os.Stat(outputsPath); err != nil {
+		log.Fatalf("%v\noutputs: %v", err, outputsPath)
+	}
+
 	var conf Config
 	err := loadConf(confPath, &conf)
 	if err != nil {
