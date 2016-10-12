@@ -8,12 +8,11 @@ import (
 	"net/http"
 	"os"
 	"path"
-	"path/filepath"
 	"sync"
 	"sync/atomic"
 
 	"github.com/yyoshiki41/gcs-image-downloader/internal/entity"
-	"github.com/yyoshiki41/gcs-image-downloader/internal/random"
+	"github.com/yyoshiki41/gcs-image-downloader/internal/file"
 
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
@@ -102,16 +101,13 @@ func download(link string) error {
 	}
 	defer resp.Body.Close()
 
-	_, fileName := path.Split(link)
-	ext := filepath.Ext(fileName)
-	name := random.Name()
-	file, err := os.Create(path.Join(outputsPath, name+ext))
+	f, err := os.Create(path.Join(outputsPath, file.Name(link)))
 	if err != nil {
 		return err
 	}
 
-	_, err = io.Copy(file, resp.Body)
-	if closeErr := file.Close(); err == nil {
+	_, err = io.Copy(f, resp.Body)
+	if closeErr := f.Close(); err == nil {
 		err = closeErr
 	}
 	return err
