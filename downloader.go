@@ -50,7 +50,6 @@ func Run(args []string) {
 
 	var errCount int64
 	var wg sync.WaitGroup
-	total := len(resp.Items)
 
 	log.Println("Start!")
 	for _, v := range resp.Items {
@@ -67,6 +66,7 @@ func Run(args []string) {
 	}
 	wg.Wait()
 
+	total := len(resp.Items)
 	log.Println("Download has completed!")
 	fmt.Printf("Total: %v, Success: %v, Failure: %v\n", total, int64(total)-errCount, errCount)
 }
