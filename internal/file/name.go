@@ -2,6 +2,7 @@ package file
 
 import (
 	"math/rand"
+	"net/url"
 	"path"
 	"path/filepath"
 	"strconv"
@@ -17,13 +18,17 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-func Name(link string) string {
+func Name(link string) (string, error) {
 	name := randName()
 
-	_, fileName := path.Split(link)
+	u, err := url.Parse(link)
+	if err != nil {
+		return "", err
+	}
+	_, fileName := path.Split(u.Path)
 	ext := filepath.Ext(fileName)
 
-	return name + ext
+	return name + ext, nil
 }
 
 func randName() string {

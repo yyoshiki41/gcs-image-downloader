@@ -47,7 +47,11 @@ func download(link string) error {
 	}
 	defer resp.Body.Close()
 
-	f, err := os.Create(path.Join(outputsPath, file.Name(link)))
+	n, err := file.Name(link)
+	if err != nil {
+		return err
+	}
+	f, err := os.Create(path.Join(outputsPath, n))
 	if err != nil {
 		return err
 	}
