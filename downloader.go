@@ -50,7 +50,7 @@ func Run(args []string) {
 	var results []entity.Link
 	var wg sync.WaitGroup
 
-	n := num / 10
+	n := (num + 9) / 10
 	for i := 0; i < n; i++ {
 		index := 10*i + 1
 		wg.Add(1)
