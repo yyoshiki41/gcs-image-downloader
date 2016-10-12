@@ -3,16 +3,11 @@ package downloader
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
-	"net/http"
 	"os"
-	"path"
 	"sync"
-	"sync/atomic"
 
 	"github.com/yyoshiki41/gcs-image-downloader/internal/entity"
-	"github.com/yyoshiki41/gcs-image-downloader/internal/file"
 
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
@@ -56,33 +51,13 @@ func Run(args []string) {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-
 			r := run(conf, index)
 			results = append(results, r.Items...)
 		}()
 	}
 	wg.Wait()
 
-	var cnt int
-	var errCount int64
-	for _, v := range results {
-		if cnt == num {
-			break
-		}
-		cnt++
-
-		wg.Add(1)
-		go func(link string) {
-			defer wg.Done()
-
-			err := download(link)
-			if err != nil {
-				atomic.AddInt64(&errCount, 1)
-				log.Println(err)
-			}
-		}(v.Link)
-	}
-	wg.Wait()
+	errCount := bulkDownload(results)
 
 	log.Println("Download has completed!")
 	fmt.Printf("Total: %v, Success: %v, Failure: %v\n", num, int64(num)-errCount, errCount)
@@ -101,23 +76,4 @@ func run(conf Config, index int) *entity.GcsResponse {
 		log.Println("CustomSearchAPI Response is empty.")
 	}
 	return resp
-}
-
-func download(link string) error {
-	resp, err := http.Get(link)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	f, err := os.Create(path.Join(outputsPath, file.Name(link)))
-	if err != nil {
-		return err
-	}
-
-	_, err = io.Copy(f, resp.Body)
-	if closeErr := f.Close(); err == nil {
-		err = closeErr
-	}
-	return err
 }
