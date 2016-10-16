@@ -18,6 +18,7 @@ var (
 	q           string
 	num         int
 	safe        string
+	imgType     string
 )
 
 func Run(args []string) {
@@ -27,7 +28,8 @@ func Run(args []string) {
 	app.Flag("outputs", "Outputs directory").Default("outputs").Short('o').StringVar(&outputsPath)
 	app.Flag("query", "Query").Required().Short('q').StringVar(&q)
 	app.Flag("number", "Number of files").Default("10").Short('n').IntVar(&num)
-	app.Flag("safe", "high, medium, off").Default("off").Short('s').StringVar(&safe)
+	app.Flag("safe", "Safety level: high, medium, off").PlaceHolder("SAFETY-LEVEL").Short('s').StringVar(&safe)
+	app.Flag("type", "Images of a type: clipart, face, lineart, news, photo").PlaceHolder("IMG-TYPE").Short('t').StringVar(&imgType)
 
 	kingpin.MustParse(app.Parse(args))
 
@@ -71,6 +73,7 @@ func run(conf Config, index int) *entity.GcsResponse {
 	gcs.setStart(index)
 	gcs.setQuery(q)
 	gcs.setSafe(safe)
+	gcs.setImgType(imgType)
 	b := gcs.Get()
 
 	resp := entity.NewGcsResponse()
