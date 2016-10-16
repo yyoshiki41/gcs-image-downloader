@@ -41,6 +41,12 @@ func (g *GcsAPI) setStart(index int) {
 	g.RawQuery = query.Encode()
 }
 
+func (g *GcsAPI) setSafe(safe string) {
+	query := g.Query()
+	query.Set("safe", safe)
+	g.RawQuery = query.Encode()
+}
+
 func (g *GcsAPI) Get() []byte {
 	resp, err := http.Get(g.String())
 	if err != nil {

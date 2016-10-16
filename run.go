@@ -17,6 +17,7 @@ var (
 	outputsPath string
 	q           string
 	num         int
+	safe        string
 )
 
 func Run(args []string) {
@@ -26,6 +27,7 @@ func Run(args []string) {
 	app.Flag("outputs", "Outputs directory").Default("outputs").Short('o').StringVar(&outputsPath)
 	app.Flag("query", "Query").Required().Short('q').StringVar(&q)
 	app.Flag("number", "Number of files").Default("10").Short('n').IntVar(&num)
+	app.Flag("safe", "high, medium, off").Default("off").Short('s').StringVar(&safe)
 
 	kingpin.MustParse(app.Parse(args))
 
@@ -68,6 +70,7 @@ func run(conf Config, index int) *entity.GcsResponse {
 	gcs.setConfig(conf)
 	gcs.setStart(index)
 	gcs.setQuery(q)
+	gcs.setSafe(safe)
 	b := gcs.Get()
 
 	resp := entity.NewGcsResponse()
