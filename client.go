@@ -42,19 +42,15 @@ func (g *GcsAPI) setStart(index int) {
 }
 
 func (g *GcsAPI) setSafe(safe string) {
-	if safe != "" {
-		query := g.Query()
-		query.Set("safe", safe)
-		g.RawQuery = query.Encode()
-	}
+	query := g.Query()
+	query.Set("safe", safe)
+	g.RawQuery = query.Encode()
 }
 
 func (g *GcsAPI) setImgType(imgType string) {
-	if imgType != "" {
-		query := g.Query()
-		query.Set("imgType", imgType)
-		g.RawQuery = query.Encode()
-	}
+	query := g.Query()
+	query.Set("imgType", imgType)
+	g.RawQuery = query.Encode()
 }
 
 func (g *GcsAPI) Get() []byte {

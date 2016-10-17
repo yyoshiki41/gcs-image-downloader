@@ -72,8 +72,13 @@ func run(conf Config, index int) *entity.GcsResponse {
 	gcs.setConfig(conf)
 	gcs.setStart(index)
 	gcs.setQuery(q)
-	gcs.setSafe(safe)
-	gcs.setImgType(imgType)
+	if safe != "" {
+		gcs.setSafe(safe)
+	}
+	if imgType != "" {
+		gcs.setImgType(imgType)
+	}
+
 	b := gcs.Get()
 
 	resp := entity.NewGcsResponse()
