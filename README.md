@@ -37,6 +37,15 @@ Number: 10
 Total: 10, Success: 10, Failure: 0
 ```
 
+## Settings
+
+[Docs](https://developers.google.com/custom-search/docs/overview).
+
+- Create a project in the [Google Developers Console](https://console.cloud.google.com/) and turn on the Custom Search API
+- [Get API Key](https://console.cloud.google.com/apis/credentials)
+- [Create new Custom Search Engine](https://cse.google.com/cse/all) and get Custom Search Engine ID
+
+
 ## Configuration
 
 ```shell
