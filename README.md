@@ -1,6 +1,8 @@
-# downloader
+# downloader - Bulk Image DownLoader
 
 Download images using Google Custom Search API.
+
+It's fast because of downloading multiple files in parallel using goroutines.
 
 
 ## Installation
