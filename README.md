@@ -43,7 +43,7 @@ Total: 10, Success: 10, Failure: 0
 $ cd $GOPATH/src/github.com/yyoshiki41/gcs-image-downloader
 $ cp ./conf/credentials.toml.skel ./conf/credentials.toml
 # Edit a config file
-$ vim ./conf/credentials.toml.skel
+$ vim ./conf/credentials.toml
 ```
 
 ## License 
