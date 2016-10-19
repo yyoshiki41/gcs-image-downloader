@@ -1,4 +1,4 @@
-# downloader - Bulk Image DownLoader
+# downloader - Bulk Image DownLoader.
 
 Download images using Google Custom Search API.
 
